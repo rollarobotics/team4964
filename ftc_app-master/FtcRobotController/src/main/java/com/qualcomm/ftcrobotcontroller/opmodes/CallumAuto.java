@@ -17,7 +17,7 @@ public class CallumAuto extends RobotManager {
 
     public CallumAuto() {
     }
-
+    
     @Override
     public void init() {
         super.init();
@@ -60,16 +60,43 @@ public class CallumAuto extends RobotManager {
                 break;
             case 2:
                 wait++;
-                if(wait >= 100)
-                {
+                if(wait >= 100) {
+                    wait = 0;
                     currentAction++;
                 }
                 break;
             case 3:
-
                 motorRight.setPower(-1.0f);
                 motorLeft.setPower(1.0f);
-
+                currentAction++;
+                break;
+            case 4:
+                if(rightEncoder <= 2000)
+                  motorRight.setPower(0.0f);
+                if(leftEncoder >= 6000)
+                  motorLeft.setPower(0.0f);
+                if(rightEncoder <= 2000 && leftEncoder >= 6000)
+                  currentAction++;
+                break;
+            case 5:
+               wait++;
+                if(wait >= 100) {
+                    wait = 0;
+                    currentAction++;
+                }
+               break;
+            case 6:
+                motorRight.setPower(1.0f);
+                motorLeft.setPower(1.0f);
+                currentAction++;
+               break;
+            case 7:
+               if(rightEncoder <= 2000)
+                  motorRight.setPower(0.0f);
+                if(leftEncoder >= 6000)
+                  motorLeft.setPower(0.0f);
+                if(rightEncoder <= 2000 && leftEncoder >= 6000)
+                  currentAction++;
                 break;
             default:
                 break;
