@@ -11,9 +11,9 @@ public class Utility extends OpMode {
     @Override
     public void loop(){}
 
-    public void wait(int waitTime)
+    public static int wheelRotations(int rotations)
     {
-
+        return rotations * 1440;
     }
 
 }

@@ -68,7 +68,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("KristanAuto", NewTeleOp.class);
     manager.register("WorkingAuto", WorkingAuto.class);
     manager.register("Forward", Forward.class);
-
+    manager.register("CallumAutoNew", CallumAutoNew.class);
 
 
     /*

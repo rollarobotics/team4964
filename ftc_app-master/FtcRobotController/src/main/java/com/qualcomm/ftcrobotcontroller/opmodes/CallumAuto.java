@@ -14,6 +14,7 @@ public class CallumAuto extends RobotManager {
     int rightEncoder = 0;
     int currentAction = 1;
     int wait = 0;
+    boolean finished = false;
 
     public CallumAuto() {
     }
@@ -47,6 +48,7 @@ public class CallumAuto extends RobotManager {
         telemetry.addData("LeftEncoder", leftEncoder);
         telemetry.addData("RightEncoder", rightEncoder);
         telemetry.addData("Wait", wait);
+        telemetry.addData("IsFinished", finished);
 
         switch(currentAction)
         {
@@ -71,11 +73,11 @@ public class CallumAuto extends RobotManager {
                 currentAction++;
                 break;
             case 4:
-                if(rightEncoder <= 2000)
+                if(rightEncoder <= 3000)
                   motorRight.setPower(0.0f);
-                if(leftEncoder >= 6000)
+                if(leftEncoder >= 5000)
                   motorLeft.setPower(0.0f);
-                if(rightEncoder <= 2000 && leftEncoder >= 6000)
+                if(rightEncoder <= 3000 && leftEncoder >= 5000)
                   currentAction++;
                 break;
             case 5:
@@ -91,12 +93,36 @@ public class CallumAuto extends RobotManager {
                 currentAction++;
                break;
             case 7:
-               if(rightEncoder <= 2000)
+               if(rightEncoder >= 9500)
                   motorRight.setPower(0.0f);
-                if(leftEncoder >= 6000)
+                if(leftEncoder >= 11500)
                   motorLeft.setPower(0.0f);
-                if(rightEncoder <= 2000 && leftEncoder >= 6000)
+                if(rightEncoder >= 9500 && leftEncoder >= 11500)
                   currentAction++;
+                break;
+            case 8:
+                wait++;
+                if(wait >= 100) {
+                    wait = 0;
+                    currentAction++;
+                }
+                break;
+            case 9:
+                motorLeft.setPower(1.0f);
+                currentAction++;
+                break;
+            case 10:
+                if(leftEncoder >= 12500)
+                    motorLeft.setPower(0.0f);
+                if(leftEncoder >= 12500)
+                    currentAction++;
+                break;
+            case 11:
+                backClimber.setPosition(0.5);
+                currentAction++;
+                break;
+            case 12:
+                finished = true;
                 break;
             default:
                 break;
