@@ -20,9 +20,9 @@ public class OmniManager extends OpMode {
     @Override
     public void init()
     {
-        frontRight = hardwareMap.dcMotor.get("bl");
+        frontRight = hardwareMap.dcMotor.get("br");
         frontRight.setDirection(DcMotor.Direction.REVERSE);
-        frontLeft = hardwareMap.dcMotor.get("br");
+        frontLeft = hardwareMap.dcMotor.get("bl");
         backRight = hardwareMap.dcMotor.get("fr");
         backRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft = hardwareMap.dcMotor.get("fl");

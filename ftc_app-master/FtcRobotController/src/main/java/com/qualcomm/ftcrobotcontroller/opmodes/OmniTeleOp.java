@@ -7,10 +7,18 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class OmniTeleOp extends OmniManager {
 
-    public OmniTeleOp()
-    {
+    int loopPart = 0;
 
-    }
+    float frontLeftPower;
+    float frontRightPower;
+    float backLeftPower;
+    float backRightPower;
+    float leftX;
+    float leftY;
+    float rightX;
+    float rightY;
+
+    public OmniTeleOp() {}
 
     @Override
     public void init()
@@ -21,38 +29,77 @@ public class OmniTeleOp extends OmniManager {
     @Override
     public void loop()
     {
+        leftX = Range.clip(gamepad1.left_stick_x, -1, 1);
+        leftY = Range.clip(gamepad1.left_stick_y, -1, 1);
+        rightX = Range.clip(gamepad1.right_stick_x, -1, 1);
+        rightY = Range.clip(gamepad1.right_stick_y, -1, 1);
+
+        frontLeftPower = 0;
+        frontRightPower = 0;
+        backLeftPower = 0;
+        backRightPower = 0;
+
         if(Math.abs(gamepad1.left_stick_x) > Math.abs(gamepad1.left_stick_y))
         {
-            backLeft.setPower(Range.clip(gamepad1.left_stick_x, -1, 1));
-            frontLeft.setPower(Range.clip(gamepad1.left_stick_x, -1, 1));
-            backRight.setPower(Range.clip(-gamepad1.left_stick_x, -1, 1));
-            frontRight.setPower(Range.clip(-gamepad1.left_stick_x, -1, 1));
+            //left / right
+            loopPart = 1;
+            backLeftPower += -leftX;
+            frontLeftPower += leftX;
+            backRightPower += leftX;
+            frontRightPower += -leftX;
         }
         else if(Math.abs(gamepad1.left_stick_x) < Math.abs(gamepad1.left_stick_y))
         {
-            backLeft.setPower(Range.clip(-gamepad1.left_stick_y, -1, 1));
-            frontLeft.setPower(Range.clip(-gamepad1.left_stick_y, -1, 1));
-            backRight.setPower(Range.clip(-gamepad1.left_stick_y, -1, 1));
-            frontRight.setPower(Range.clip(-gamepad1.left_stick_y, -1, 1));
+            //forward / backwards
+            loopPart = 2;
+            backLeftPower += -leftY;
+            frontLeftPower += -leftY;
+            backRightPower += -leftY;
+            frontRightPower += -leftY;
         }
         else
         {
             if(Math.abs(gamepad1.right_stick_x) < 0.01)
             {
-                backLeft.setPower(0);
-                frontLeft.setPower(0);
-                backRight.setPower(0);
-                frontRight.setPower(0);
+                //not moving
+                loopPart = 3;
+                backLeftPower = 0;
+                frontLeftPower = 0;
+                backRightPower = 0;
+                frontRightPower = 0;
             }
             else
             {
-                double speed = gamepad1.right_stick_x;
-                backLeft.setPower(Range.clip(-speed, -1, 1));
-                frontLeft.setPower(Range.clip(speed, -1, 1));
-                backRight.setPower(Range.clip(speed, -1, 1));
-                frontRight.setPower(Range.clip(-speed, -1, 1));
+                //turn left / right
+                loopPart = 4;
+                backLeftPower += rightX;
+                frontLeftPower += rightX;
+                backRightPower += -rightX;
+                frontRightPower += -rightX;
             }
         }
+
+        if(loopPart > -)
+        {
+            frontLeftPower -= (rightX * 2);
+            backLeftPower -= (rightX * 2);
+        }
+
+        frontLeftPower = Range.clip(frontLeftPower, -1, 1);
+        frontRightPower = Range.clip(frontRightPower, -1, 1);
+        backLeftPower = Range.clip(backLeftPower, -1, 1);
+        backRightPower = Range.clip(backRightPower, -1, 1);
+
+        frontLeft.setPower(frontLeftPower);
+        frontRight.setPower(frontRightPower);
+        backLeft.setPower(backLeftPower);
+        backRight.setPower(backRightPower);
+
+        telemetry.addData("LoopPart", loopPart);
+        telemetry.addData("FrontLeft", frontLeftPower);
+        telemetry.addData("FrontRight", frontRightPower);
+        telemetry.addData("BackLeft", backLeftPower);
+        telemetry.addData("BackRight", backRightPower);
     }
 
 }
